@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:insert="fragmentos :: headerfiles">
+</head>
+<body>
+<div class="container-xxl container-p-y">
+    <div class="misc-wrapper">
+        <h2 class="mb-2 mx-2">Error 403!</h2>
+        <h2 class="mb-2 mx-2">Acceso no autorizado!</h2>
+        <p class="mb-4 mx-2">Sorry for the inconvenience but we're performing some maintenance at the moment</p>
+        <a href="index.html" class="btn btn-primary">Back to home</a>
+        <div class="mt-4">
+            <img
+                    src="@{/assets/img/illustrations/girl-doing-yoga-light.png}"
+                    alt="girl-doing-yoga-light"
+                    width="500"
+                    class="img-fluid"
+                    data-app-dark-img="illustrations/girl-doing-yoga-dark.png"
+                    data-app-light-img="illustrations/girl-doing-yoga-light.png"
+            />
+        </div>
+    </div>
+</div>
+
+<footer th:insert="fragmentos :: footer"></footer>
+<div th:insert="fragmentos :: scripts"></div>
+</body>
+</html>
