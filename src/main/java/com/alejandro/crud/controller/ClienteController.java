@@ -5,6 +5,7 @@ import com.alejandro.crud.service.ClienteService;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,12 +24,14 @@ public class ClienteController {
         mv.setViewName("/cliente/lista");
         List<Cliente> clienteList = clienteService.findAll();
         mv.addObject("clientes",clienteList);
+        mv.addObject("menuActivo", "cliente");
         return  mv;
     }
 
 //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("nuevo")
-    public String nuevo(){
+    public String nuevo(Model model){
+        model.addAttribute("menuActivo", "cliente");
         return "/cliente/nuevo";
     }
 //
@@ -48,6 +51,7 @@ public class ClienteController {
         Cliente cliente = clienteService.findById(id).get();
         ModelAndView mv = new ModelAndView("/cliente/detalle");
         mv.addObject("cliente", cliente);
+        mv.addObject("menuActivo", "cliente");
         return mv;
     }
 
