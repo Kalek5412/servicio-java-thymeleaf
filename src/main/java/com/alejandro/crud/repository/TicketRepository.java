@@ -6,5 +6,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
-    List<Ticket> findByFechaCreacionBetween(Date inicio, Date fin);
+   // List<Ticket> findByFechaCreacionBetween(Date inicio, Date fin);
 }

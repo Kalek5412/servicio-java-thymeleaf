@@ -16,7 +16,7 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketNombre ticketNombre;
     private String descripcion;
-    private LocalDate fechaCreacion;
+    private LocalDate fecha;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")

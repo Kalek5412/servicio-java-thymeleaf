@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:insert="fragmentos :: headerfiles">
+</head>
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar" sec:authorize="isAuthenticated()">
+    <div class="layout-container">
+        <!-- Menu -->
+        <div th:insert="fragmentos :: menu"></div>
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <div th:insert="fragmentos :: navbar"></div>
+            <div class="content-wrapper">
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Basic Tables</h4>
+                    <div class="card">
+                        <h5 class="card-header">Table Basic</h5>
+                        <div class="table-responsive text-nowrap">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nombre</th>
+                                    <th>Descripcion</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                <tr th:each="servicio, iterStat : ${servicios}">
+                                    <td th:text="${iterStat.count}"><i class="fab fa-angular fa-lg text-danger me-3"></i></td>
+                                    <td>
+                                         <span th:if="${servicio.servicioNombre.name() == 'REPARACION'}" style="color:red;">
+                                            REPARACION
+                                         </span>
+                                        <span th:if="${servicio.servicioNombre.name() == 'MANTENIMIENTO'}" style="color:orange;">
+                                            MANTENIMIENTO
+                                        </span>
+                                    </td>
+                                    <td th:text="${servicio.descripcion}"></td>
+                                    <td>
+                                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+
+                                            <!-- VER -->
+                                            <li class="avatar avatar-xs pull-up bg-info text-white d-flex justify-content-center align-items-center me-3"
+                                                >
+                                                <a th:href="@{/servicio/detalle/{id}(id=${servicio.id})}"
+                                                   class="text-white">
+                                                    <i class="bx bx-show"></i>
+                                                </a>
+                                            </li>
+
+                                            <!-- EDITAR -->
+                                            <li class="avatar avatar-xs pull-up bg-warning text-white d-flex justify-content-center align-items-center me-3">
+                                                <a th:href="@{/servicio/editar/{id}(id=${servicio.id})}"
+                                                   class="text-white">
+                                                    <i class="bx bx-edit-alt"></i>
+                                                </a>
+                                            </li>
+
+                                            <!-- ELIMINAR / DESACTIVAR -->
+                                            <li class="avatar avatar-xs pull-up bg-danger text-white d-flex justify-content-center align-items-center"
+                                                >
+                                                <a th:href="@{/servicio/borrar/{id}(id=${servicio.id})}"
+                                                   class="text-white"
+                                                   onclick="return confirm('¿Desactivar servicio?')">
+                                                    <i class="bx bx-trash"></i>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Content -->
+                <div class="content-backdrop fade"></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+
+<div th:insert="fragmentos :: scripts"></div>
+<div th:insert="fragmentos :: sweetalert"></div>
+</body>
+</html>
