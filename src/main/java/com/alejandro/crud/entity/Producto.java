@@ -3,6 +3,8 @@ package com.alejandro.crud.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "productos")
 public class Producto {
@@ -13,6 +15,8 @@ public class Producto {
     private float precio;
     @OneToOne(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private Inventario inventario;
+    @OneToMany(mappedBy = "servicio")
+    private List<Ticket> tickets;
 
     public Producto() {
     }

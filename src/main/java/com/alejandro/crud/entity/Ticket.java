@@ -15,16 +15,92 @@ public class Ticket {
     private Long id;
     @Enumerated(EnumType.STRING)
     private TicketNombre ticketNombre;
+    private Integer cantidad;
     private String descripcion;
     private LocalDate fecha;
 
     @ManyToOne
+    @JoinColumn(name = "producto_id")
+    private Producto producto;
+    @ManyToOne
     @JoinColumn(name = "cliente_id")
-    Cliente cliente;
+    private Cliente cliente;
     @ManyToOne
     @JoinColumn(name = "servicio_id")
-    Servicio servicio;
+    private Servicio servicio;
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    Usuario usuarioAsignado;
+    private Usuario usuarioAsignado;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public TicketNombre getTicketNombre() {
+        return ticketNombre;
+    }
+
+    public void setTicketNombre(TicketNombre ticketNombre) {
+        this.ticketNombre = ticketNombre;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+
+    public Usuario getUsuarioAsignado() {
+        return usuarioAsignado;
+    }
+
+    public void setUsuarioAsignado(Usuario usuarioAsignado) {
+        this.usuarioAsignado = usuarioAsignado;
+    }
 }

@@ -5,6 +5,7 @@ import com.alejandro.crud.dto.InventarioProductoDTO;
 import com.alejandro.crud.entity.Inventario;
 import com.alejandro.crud.entity.Producto;
 import com.alejandro.crud.service.InventarioService;
+import com.alejandro.crud.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,9 @@ public class InventarioController {
     @Autowired
     InventarioService inventarioService;
 
+    @Autowired
+    ProductoService productoService;
+
     @GetMapping("/lista")
     public String lista(Model model){
         List<Inventario> lista = inventarioService.findAll();
@@ -30,7 +34,7 @@ public class InventarioController {
     //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("nuevo")
     public String nuevo(Model model){
-        model.addAttribute("inventarioDTO", new InventarioProductoDTO());
+        model.addAttribute("inventarioProductoDTO", new InventarioProductoDTO());
         model.addAttribute("menuActivo", "inventario");
         return "/Inventario/nuevo";
     }
@@ -42,13 +46,10 @@ public class InventarioController {
         Producto producto = new Producto();
         producto.setNombre(dto.getNombre());
         producto.setPrecio(dto.getPrecio());
-        // crear inventario
+        productoService.save(producto);
         Inventario inventario = new Inventario();
         inventario.setStock(dto.getStock());
-        inventario.setFechaUso(dto.getFechaUso());
         inventario.setProducto(producto);
-        // relación bidireccional (MUY IMPORTANTE)
-        producto.setInventario(inventario);
         inventarioService.save(inventario);
         mv.setViewName("redirect:/inventario/lista");
         return mv;

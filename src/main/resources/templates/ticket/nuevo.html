@@ -16,7 +16,7 @@
             <div class="content-wrapper">
                 <!-- Content -->
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Formulario/</span> inventario</h4>
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Formulario/</span> ticket</h4>
                     <div class="row">
                         <div class="col-xl">
                             <div class="card mb-12">
@@ -25,21 +25,20 @@
                                     <small class="text-muted float-end">Default label</small>
                                 </div>
                                 <div class="card-body">
-                                    <form th:action="@{/inventario/guardar}" method="POST" th:object="${inventarioProductoDTO}">
+                                    <form th:action="@{/ticket/guardar}" method="POST" th:object="${ticket}">
                                         <!-- control ataque csrf -->
                                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                         <!-- fin control ataque csrf -->
                                         <div class="mb-3">
-                                            <label for="nombre" class="form-label">producto</label>
-                                            <input type="text" id="nombre" name="nombre" placeholder="Nombre">
+                                            <label for="ticketNombre" class="form-label">Activo</label>
+                                            <select class="form-select" id="ticketNombre" aria-label="Default select example" name="ticketNombre">
+                                                <option value="MANTENIMIENTO">MANTENIMIENTO</option>
+                                                <option value="REPARACION">REPARACION</option>
+                                            </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="precio">precio</label>
-                                            <input type="number" class="form-control" id="precio"  name="precio" required="required" placeholder="..." autocomplete="off">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="stock" class="form-label">stock</label>
-                                            <input type="number" id="stock" name="stock" placeholder="stock">
+                                            <label class="form-label" for="descripcion">descripcion</label>
+                                            <input type="text" class="form-control" id="descripcion"  name="descripcion" required="required" placeholder="..." autocomplete="off">
                                         </div>
 
                                         <button type="submit" class="btn btn-primary"><i class="far fa-save"></i>Envoar</button>

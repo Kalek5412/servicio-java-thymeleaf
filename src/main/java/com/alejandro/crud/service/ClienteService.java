@@ -20,7 +20,7 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public Optional<Cliente> findById(int id){
+    public Optional<Cliente> findById(Long id){
         return clienteRepository.findById(id);
     }
 
@@ -28,11 +28,11 @@ public class ClienteService {
         clienteRepository.save(cliente);
     }
 
-    public void delete(int id){
+    public void delete(Long id){
         clienteRepository.deleteById(id);
     }
 
-    public boolean existsById(int id){
+    public boolean existsById(Long id){
         return clienteRepository.existsById(id);
     }
 

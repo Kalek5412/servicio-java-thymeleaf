@@ -24,25 +24,30 @@
                                 <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Producto</th>
-                                    <th>Procio</th>
-                                    <th>sotck</th>
+                                    <th>Nombre</th>
+                                    <th>Descripcion</th>
                                     <th>Acciones</th>
                                 </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                <tr th:each="inventario, iterStat : ${inventarios}">
+                                <tr th:each="ticket, iterStat : ${tickets}">
                                     <td th:text="${iterStat.count}"><i class="fab fa-angular fa-lg text-danger me-3"></i></td>
-                                    <td th:text="${inventario.producto.nombre}"></td>
-                                    <td th:text="${inventario.producto.precio}"></td>
-                                    <td th:text="${inventario.stock}"></td>
+                                    <td>
+                                         <span th:if="${ticket.ticketNombre.name() == 'REPARACION'}" style="color:red;">
+                                            REPARACION
+                                         </span>
+                                        <span th:if="${ticket.ticketNombre.name() == 'MANTENIMIENTO'}" style="color:orange;">
+                                            MANTENIMIENTO
+                                        </span>
+                                    </td>
+                                    <td th:text="${ticket.descripcion}"></td>
                                     <td>
                                         <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
 
                                             <!-- VER -->
                                             <li class="avatar avatar-xs pull-up bg-info text-white d-flex justify-content-center align-items-center me-3"
                                                 >
-                                                <a th:href="@{/inventario/detalle/{id}(id=${inventario.id})}"
+                                                <a th:href="@{/ticket/detalle/{id}(id=${ticket.id})}"
                                                    class="text-white">
                                                     <i class="bx bx-show"></i>
                                                 </a>
@@ -50,7 +55,7 @@
 
                                             <!-- EDITAR -->
                                             <li class="avatar avatar-xs pull-up bg-warning text-white d-flex justify-content-center align-items-center me-3">
-                                                <a th:href="@{/inventario/editar/{id}(id=${inventario.id})}"
+                                                <a th:href="@{/ticket/editar/{id}(id=${ticket.id})}"
                                                    class="text-white">
                                                     <i class="bx bx-edit-alt"></i>
                                                 </a>
@@ -59,9 +64,9 @@
                                             <!-- ELIMINAR / DESACTIVAR -->
                                             <li class="avatar avatar-xs pull-up bg-danger text-white d-flex justify-content-center align-items-center"
                                                 >
-                                                <a th:href="@{/inventario/borrar/{id}(id=${inventario.id})}"
+                                                <a th:href="@{/ticket/borrar/{id}(id=${ticket.id})}"
                                                    class="text-white"
-                                                   onclick="return confirm('¿Desactivar inventario?')">
+                                                   onclick="return confirm('¿Desactivar ticket?')">
                                                     <i class="bx bx-trash"></i>
                                                 </a>
                                             </li>

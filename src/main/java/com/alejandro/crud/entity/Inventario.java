@@ -12,7 +12,6 @@ public class Inventario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer stock;
-    private LocalDate fechaUso;
     @OneToOne
     @JoinColumn(name = "producto_id")
     private Producto producto;
@@ -31,14 +30,6 @@ public class Inventario {
 
     public void setStock(Integer stock) {
         this.stock = stock;
-    }
-
-    public LocalDate getFechaUso() {
-        return fechaUso;
-    }
-
-    public void setFechaUso(LocalDate fechaUso) {
-        this.fechaUso = fechaUso;
     }
 
     public Producto getProducto() {
