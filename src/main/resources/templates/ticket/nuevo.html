@@ -25,22 +25,70 @@
                                     <small class="text-muted float-end">Default label</small>
                                 </div>
                                 <div class="card-body">
-                                    <form th:action="@{/ticket/guardar}" method="POST" th:object="${ticket}">
+                                    <form th:action="@{/ticket/guardar}" method="POST" th:object="${ticketDTO}">
                                         <!-- control ataque csrf -->
                                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                         <!-- fin control ataque csrf -->
                                         <div class="mb-3">
-                                            <label for="ticketNombre" class="form-label">Activo</label>
-                                            <select class="form-select" id="ticketNombre" aria-label="Default select example" name="ticketNombre">
-                                                <option value="MANTENIMIENTO">MANTENIMIENTO</option>
-                                                <option value="REPARACION">REPARACION</option>
+                                            <label class="form-label">Tipo ticjet</label>
+                                            <select class="form-select"  aria-label="Default select example" th:field="*{ticketEstado}">
+                                                <option value="PENDIENTE">PENDIENTE</option>
+                                                <option value="EN_PROCESO">EN PROCESO</option>
+                                                <option value="FINALIZADO">FINALIZDO</option>
+                                                <option value="CANCELADO">CALCELADO</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="descripcion">descripcion</label>
-                                            <input type="text" class="form-control" id="descripcion"  name="descripcion" required="required" placeholder="..." autocomplete="off">
+                                            <label class="form-label">descripcion</label>
+                                            <input type="text" class="form-control" th:field="*{descripcion}" required placeholder="..." autocomplete="off">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">cliente</label>
+                                            <select class="form-select"  aria-label="Default select example" th:field="*{clienteId}">
+                                                <option value="#">...</option>
+                                                <option th:each="c : ${clientes}"
+                                                        th:value="${c.id}"
+                                                        th:text="${c.nombre}">
+                                                </option>
+                                            </select>
                                         </div>
 
+                                        <div class="mb-3">
+                                            <label class="form-label">productos</label>
+                                            <select class="form-select"  aria-label="Default select example" th:field="*{productoId}">
+                                                <option value="#">...</option>
+                                                <option th:each="p : ${productos}"
+                                                        th:value="${p.id}"
+                                                        th:text="${p.nombre}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Servicio</label>
+                                            <select class="form-select" aria-label="Default select example" th:field="*{servicioId}">
+                                                <option value="">Seleccione</option>
+                                                <option th:each="s : ${servicios}"
+                                                        th:value="${s.id}"
+                                                        th:text="${s.servicioNombre}">
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Cantidad</label>
+                                            <input type="number" class="form-control" th:field="*{cantidad}" required>
+                                        </div>
+                                        <div class="mb-3"
+                                             sec:authorize="hasRole('ADMIN')">
+                                            <label class="form-label">Asignar Usuario</label>
+                                            <select class="form-select" th:field="*{usuarioId}">
+                                                <option value="">Yo mismo</option>
+                                                <option th:each="u : ${usuarios}"
+                                                        th:value="${u.id}"
+                                                        th:text="${u.nombreUsuario}">
+                                                </option>
+                                            </select>
+                                        </div>
                                         <button type="submit" class="btn btn-primary"><i class="far fa-save"></i>Envoar</button>
                                     </form>
 

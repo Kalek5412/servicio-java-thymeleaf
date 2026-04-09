@@ -2,6 +2,7 @@ package com.alejandro.crud.service;
 
 import com.alejandro.crud.entity.Cliente;
 import com.alejandro.crud.entity.Inventario;
+import com.alejandro.crud.entity.Producto;
 import com.alejandro.crud.repository.ClienteRepository;
 import com.alejandro.crud.repository.InventarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class InventarioService {
         return inventarioRepository.findAll();
     }
 
-    public Optional<Inventario> findById(int id){
+    public Optional<Inventario> findById(Long id){
         return inventarioRepository.findById(id);
     }
 
@@ -29,11 +30,16 @@ public class InventarioService {
         inventarioRepository.save(inventario);
     }
 
-    public void delete(int id){
+    public void delete(Long id){
         inventarioRepository.deleteById(id);
     }
 
-    public boolean existsById(int id){
+    public boolean existsById(Long id){
         return inventarioRepository.existsById(id);
+    }
+
+    public Inventario findByProducto(Producto producto){
+        return inventarioRepository.findByProducto(producto)
+                .orElseThrow(() -> new RuntimeException("Inventario no encontrado para el producto"));
     }
 }

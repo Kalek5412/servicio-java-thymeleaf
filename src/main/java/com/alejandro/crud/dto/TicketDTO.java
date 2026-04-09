@@ -1,14 +1,24 @@
 package com.alejandro.crud.dto;
 
-import com.alejandro.crud.enums.TicketNombre;
+import com.alejandro.crud.enums.TicketEstado;
+
 
 public class TicketDTO {
     private Integer clienteId;
     private Integer servicioId;
     private Integer productoId;
+    private Integer usuarioId;
     private Integer cantidad;
     private String descripcion;
-    private TicketNombre ticketNombre;
+    private TicketEstado ticketEstado;
+
+    public Integer getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 
     public Integer getClienteId() {
         return clienteId;
@@ -50,11 +60,11 @@ public class TicketDTO {
         this.descripcion = descripcion;
     }
 
-    public TicketNombre getTicketNombre() {
-        return ticketNombre;
+    public TicketEstado getTicketEstado() {
+        return ticketEstado;
     }
 
-    public void setTicketNombre(TicketNombre ticketNombre) {
-        this.ticketNombre = ticketNombre;
+    public void setTicketEstado(TicketEstado ticketEstado) {
+        this.ticketEstado = ticketEstado;
     }
 }

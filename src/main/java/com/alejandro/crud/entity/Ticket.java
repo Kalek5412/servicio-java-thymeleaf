@@ -1,7 +1,6 @@
 package com.alejandro.crud.entity;
 
-import com.alejandro.crud.enums.ServicioNombre;
-import com.alejandro.crud.enums.TicketNombre;
+import com.alejandro.crud.enums.TicketEstado;
 import com.alejandro.crud.security.entity.Usuario;
 import jakarta.persistence.*;
 
@@ -14,7 +13,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
-    private TicketNombre ticketNombre;
+    private TicketEstado ticketEstado;
     private Integer cantidad;
     private String descripcion;
     private LocalDate fecha;
@@ -40,12 +39,12 @@ public class Ticket {
         this.id = id;
     }
 
-    public TicketNombre getTicketNombre() {
-        return ticketNombre;
+    public TicketEstado getTicketEstado() {
+        return ticketEstado;
     }
 
-    public void setTicketNombre(TicketNombre ticketNombre) {
-        this.ticketNombre = ticketNombre;
+    public void setTicketEstado(TicketEstado ticketEstado) {
+        this.ticketEstado = ticketEstado;
     }
 
     public Integer getCantidad() {

@@ -21,7 +21,7 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    public Optional<Ticket> findById(int id){
+    public Optional<Ticket> findById(Long id){
         return ticketRepository.findById(id);
     }
 
@@ -29,11 +29,11 @@ public class TicketService {
         ticketRepository.save(ticket);
     }
 
-    public void delete(int id){
+    public void delete(Long id){
         ticketRepository.deleteById(id);
     }
 
-    public boolean existsById(int id){
+    public boolean existsById(Long id){
         return ticketRepository.existsById(id);
     }
 }

@@ -61,10 +61,10 @@ public class ProductoController {
     }
 
     @GetMapping("/detalle/{id}")
-    public ModelAndView detalle(@PathVariable("id") int id){
+    public ModelAndView detalle(@PathVariable("id") Long id){
         if(!productoService.existsById(id))
             return new ModelAndView("redirect:/producto/lista");
-        Producto producto = productoService.getOne(id).get();
+        Producto producto = productoService.findById(id).get();
         ModelAndView mv = new ModelAndView("/producto/detalle");
         mv.addObject("producto", producto);
         return mv;
@@ -72,10 +72,10 @@ public class ProductoController {
 
     //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id}")
-    public ModelAndView editar(@PathVariable("id") int id){
+    public ModelAndView editar(@PathVariable("id") Long id){
         if(!productoService.existsById(id))
             return new ModelAndView("redirect:/producto/lista");
-        Producto producto = productoService.getOne(id).get();
+        Producto producto = productoService.findById(id).get();
         ModelAndView mv = new ModelAndView("/producto/editar");
         mv.addObject("producto", producto);
         return mv;
@@ -83,11 +83,11 @@ public class ProductoController {
 
     //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/actualizar")
-    public ModelAndView actualizar(@RequestParam int id, @RequestParam String nombre, @RequestParam float precio){
+    public ModelAndView actualizar(@RequestParam Long id, @RequestParam String nombre, @RequestParam float precio){
         if(!productoService.existsById(id))
             return new ModelAndView("redirect:/producto/lista");
         ModelAndView mv = new ModelAndView();
-        Producto producto = productoService.getOne(id).get();
+        Producto producto = productoService.findById(id).get();
         if(StringUtils.isBlank(nombre)){
             mv.setViewName("producto/editar");
             mv.addObject("producto", producto);
@@ -115,7 +115,7 @@ public class ProductoController {
 
     //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/borrar/{id}")
-    public ModelAndView borrar(@PathVariable("id")int id){
+    public ModelAndView borrar(@PathVariable("id")Long id){
         if(productoService.existsById(id)){
             productoService.delete(id);
             return new ModelAndView("redirect:/producto/lista");

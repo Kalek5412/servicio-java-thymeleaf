@@ -56,7 +56,7 @@ public class InventarioController {
     }
 
     @GetMapping("/detalle/{id}")
-    public ModelAndView detalle(@PathVariable("id") int id){
+    public ModelAndView detalle(@PathVariable("id") Long id){
         if(!inventarioService.existsById(id))
             return new ModelAndView("redirect:/inventario/lista");
         Inventario inventario = inventarioService.findById(id).get();
@@ -68,7 +68,7 @@ public class InventarioController {
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id}")
-    public ModelAndView editar(@PathVariable("id") int id){
+    public ModelAndView editar(@PathVariable("id") Long id){
         if(!inventarioService.existsById(id))
             return new ModelAndView("redirect:/inventario/lista");
         Inventario inventario = inventarioService.findById(id).get();
@@ -79,7 +79,7 @@ public class InventarioController {
 
     //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/actualizar")
-    public ModelAndView actualizar(@ModelAttribute Inventario inventario,@RequestParam int id){
+    public ModelAndView actualizar(@ModelAttribute Inventario inventario,@RequestParam Long id){
         if(!inventarioService.existsById(id))
             return new ModelAndView("redirect:/inventario/lista");
         ModelAndView mv = new ModelAndView();
@@ -91,7 +91,7 @@ public class InventarioController {
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/borrar/{id}")
-    public ModelAndView borrar(@PathVariable("id")int id){
+    public ModelAndView borrar(@PathVariable("id")Long id){
         if(inventarioService.existsById(id)){
             inventarioService.delete(id);
             return new ModelAndView("redirect:/inventario/lista");

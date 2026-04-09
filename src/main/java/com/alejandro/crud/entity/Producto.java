@@ -15,7 +15,7 @@ public class Producto {
     private float precio;
     @OneToOne(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private Inventario inventario;
-    @OneToMany(mappedBy = "servicio")
+    @OneToMany(mappedBy = "producto")
     private List<Ticket> tickets;
 
     public Producto() {

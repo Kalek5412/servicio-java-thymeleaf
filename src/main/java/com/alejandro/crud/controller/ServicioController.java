@@ -43,7 +43,7 @@ public class ServicioController {
     }
 
     @GetMapping("/detalle/{id}")
-    public ModelAndView detalle(@PathVariable("id") int id){
+    public ModelAndView detalle(@PathVariable("id") Long id){
         if(!servicioService.existsById(id))
             return new ModelAndView("redirect:/servicio/lista");
         Servicio servicio = servicioService.findById(id).get();
@@ -55,7 +55,7 @@ public class ServicioController {
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id}")
-    public ModelAndView editar(@PathVariable("id") int id){
+    public ModelAndView editar(@PathVariable("id") Long id){
         if(!servicioService.existsById(id))
             return new ModelAndView("redirect:/servicio/lista");
         Servicio servicio = servicioService.findById(id).get();
@@ -66,7 +66,7 @@ public class ServicioController {
 
     //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/actualizar")
-    public ModelAndView actualizar(@ModelAttribute Servicio servicio,@RequestParam int id){
+    public ModelAndView actualizar(@ModelAttribute Servicio servicio,@RequestParam Long id){
         if(!servicioService.existsById(id))
             return new ModelAndView("redirect:/servicio/lista");
         ModelAndView mv = new ModelAndView();
@@ -79,7 +79,7 @@ public class ServicioController {
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/borrar/{id}")
-    public ModelAndView borrar(@PathVariable("id")int id){
+    public ModelAndView borrar(@PathVariable("id")Long id){
         if(servicioService.existsById(id)){
             servicioService.delete(id);
             return new ModelAndView("redirect:/servicio/lista");

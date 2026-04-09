@@ -24,8 +24,12 @@
                                 <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Nombre</th>
-                                    <th>Descripcion</th>
+                                    <th>estado</th>
+                                    <th>Cliente</th>
+                                    <th>Producto</th>
+                                    <th>Usuario</th>
+                                    <th>Descripción</th>
+                                    <th>Fecha</th>
                                     <th>Acciones</th>
                                 </tr>
                                 </thead>
@@ -33,14 +37,24 @@
                                 <tr th:each="ticket, iterStat : ${tickets}">
                                     <td th:text="${iterStat.count}"><i class="fab fa-angular fa-lg text-danger me-3"></i></td>
                                     <td>
-                                         <span th:if="${ticket.ticketNombre.name() == 'REPARACION'}" style="color:red;">
-                                            REPARACION
-                                         </span>
-                                        <span th:if="${ticket.ticketNombre.name() == 'MANTENIMIENTO'}" style="color:orange;">
-                                            MANTENIMIENTO
-                                        </span>
+                                        <span th:if="${ticket.ticketEstado.name() == 'PENDIENTE'}" style="color:gray;">PENDIENTE</span>
+                                        <span th:if="${ticket.ticketEstado.name() == 'EN_PROCESO'}" style="color:orange;">EN PROCESO</span>
+                                        <span th:if="${ticket.ticketEstado.name() == 'FINALIZADO'}" style="color:green;">FINALIZADO</span>
+                                        <span th:if="${ticket.ticketEstado.name() == 'CANCELADO'}" style="color:red;">CANCELADO</span>
                                     </td>
+                                    <td th:text="${ticket.cliente.nombre}"></td>
+
+                                    <!-- Producto -->
+                                    <td th:text="${ticket.producto.nombre}"></td>
+                                    <td th:text="${ticket.servicio.servicioNombre}"></td>
+                                    <!-- Usuario -->
+                                    <td th:text="${ticket.usuarioAsignado.nombreUsuario}"></td>
+
+                                    <!-- Descripción -->
                                     <td th:text="${ticket.descripcion}"></td>
+
+                                    <!-- Fecha -->
+                                    <td th:text="${ticket.fecha}"></td>
                                     <td>
                                         <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
 

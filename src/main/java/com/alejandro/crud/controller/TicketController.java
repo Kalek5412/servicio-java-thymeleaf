@@ -2,17 +2,20 @@ package com.alejandro.crud.controller;
 
 import com.alejandro.crud.dto.InventarioProductoDTO;
 import com.alejandro.crud.dto.TicketDTO;
-import com.alejandro.crud.entity.Cliente;
-import com.alejandro.crud.entity.Producto;
-import com.alejandro.crud.entity.Ticket;
+import com.alejandro.crud.entity.*;
+import com.alejandro.crud.security.entity.Usuario;
+import com.alejandro.crud.security.service.UsuarioService;
 import com.alejandro.crud.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/ticket")
@@ -28,6 +31,8 @@ public class TicketController {
     ServicioService servicioService;
     @Autowired
     InventarioService inventarioService;
+    @Autowired
+    UsuarioService usuarioService;
 
     @GetMapping("/lista")
     public ModelAndView list(){
@@ -54,34 +59,53 @@ public class TicketController {
     @PostMapping("/guardar")
     public ModelAndView crear(@ModelAttribute TicketDTO dto){
         ModelAndView mv = new ModelAndView();
-        Producto producto = productoService.getOne(dto.getProductoId()).get();
-        Cliente cliente = clienteService.findById(dto.getClienteId()).get();
-        var servicio = servicioService.findById(dto.getServicioId()).get();
-        var inventario = inventarioService.findByProducto(producto);
-        // 3. VALIDAR STOCK
+        if(dto.getProductoId() == null || dto.getClienteId() == null || dto.getServicioId() == null){
+            return new ModelAndView("redirect:/ticket/nuevo?error=datos");
+        }
+        Producto producto = productoService.findById(dto.getProductoId().longValue())
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        Cliente cliente = clienteService.findById(dto.getClienteId().longValue())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        Servicio servicio = servicioService.findById(dto.getServicioId().longValue())
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+        Inventario inventario = inventarioService.findByProducto(producto);
         if(inventario.getStock() < dto.getCantidad()){
             return new ModelAndView("redirect:/ticket/nuevo?error=stock");
         }
-        // 4. DESCONTAR STOCK 🔥
         inventario.setStock(inventario.getStock() - dto.getCantidad());
         inventarioService.save(inventario);
-        // 5. CREAR TICKET
         Ticket ticket = new Ticket();
         ticket.setProducto(producto);
         ticket.setCliente(cliente);
         ticket.setServicio(servicio);
         ticket.setCantidad(dto.getCantidad());
         ticket.setDescripcion(dto.getDescripcion());
-        ticket.setTicketNombre(dto.getTicketNombre());
+        ticket.setTicketEstado(dto.getTicketEstado());
         ticket.setFecha(java.time.LocalDate.now());
-        // 6. GUARDAR
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        Usuario usuarioLogueado = usuarioService.getByNombreUsuario(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        boolean esAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (esAdmin && dto.getUsuarioId() != null) {
+            // Si es admin y seleccionó un usuario en el form
+            Usuario usuarioAsignado = usuarioService.getById(dto.getUsuarioId())
+                    .orElseThrow(() -> new RuntimeException("Usuario seleccionado no encontrado"));
+            ticket.setUsuarioAsignado(usuarioAsignado);
+        } else {
+            // Usuario normal → se asigna a sí mismo
+            ticket.setUsuarioAsignado(usuarioLogueado);
+        }
         ticketService.save(ticket);
         mv.setViewName("redirect:/ticket/lista");
         return mv;
     }
 
     @GetMapping("/detalle/{id}")
-    public ModelAndView detalle(@PathVariable("id") int id){
+    public ModelAndView detalle(@PathVariable("id") Long id){
         if(!ticketService.existsById(id))
             return new ModelAndView("redirect:/ticket/lista");
         Ticket ticket = ticketService.findById(id).get();
@@ -93,7 +117,7 @@ public class TicketController {
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id}")
-    public ModelAndView editar(@PathVariable("id") int id){
+    public ModelAndView editar(@PathVariable("id") Long id){
         if(!ticketService.existsById(id))
             return new ModelAndView("redirect:/ticket/lista");
         Ticket ticket = ticketService.findById(id).get();
@@ -104,7 +128,7 @@ public class TicketController {
 
     //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/actualizar")
-    public ModelAndView actualizar(@ModelAttribute Ticket ticket,@RequestParam int id){
+    public ModelAndView actualizar(@ModelAttribute Ticket ticket,@RequestParam Long id){
         if(!ticketService.existsById(id))
             return new ModelAndView("redirect:/ticket/lista");
         ModelAndView mv = new ModelAndView();
@@ -116,7 +140,7 @@ public class TicketController {
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/borrar/{id}")
-    public ModelAndView borrar(@PathVariable("id")int id){
+    public ModelAndView borrar(@PathVariable("id")Long id){
         if(ticketService.existsById(id)){
             ticketService.delete(id);
             return new ModelAndView("redirect:/ticket/lista");
