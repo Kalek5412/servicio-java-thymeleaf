@@ -3,6 +3,7 @@ package com.alejandro.crud.controller;
 import com.alejandro.crud.dto.InventarioProductoDTO;
 import com.alejandro.crud.dto.TicketDTO;
 import com.alejandro.crud.entity.*;
+import com.alejandro.crud.enums.ServicioNombre;
 import com.alejandro.crud.security.entity.Usuario;
 import com.alejandro.crud.security.service.UsuarioService;
 import com.alejandro.crud.service.*;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,25 +70,26 @@ public class TicketController {
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
         Servicio servicio = servicioService.findById(dto.getServicioId().longValue())
                 .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
-        Inventario inventario = inventarioService.findByProducto(producto);
-        if(inventario.getStock() < dto.getCantidad()){
-            return new ModelAndView("redirect:/ticket/nuevo?error=stock");
+        if(dto.getCantidad() != null && dto.getCantidad() > 0){
+            Inventario inventario = inventarioService.findByProducto(producto);
+            if(inventario.getStock() < dto.getCantidad()){
+                return new ModelAndView("redirect:/ticket/nuevo?error=stock");
+            }
+            inventario.setStock(inventario.getStock() - dto.getCantidad());
+            inventarioService.save(inventario);
         }
-        inventario.setStock(inventario.getStock() - dto.getCantidad());
-        inventarioService.save(inventario);
         Ticket ticket = new Ticket();
         ticket.setProducto(producto);
         ticket.setCliente(cliente);
         ticket.setServicio(servicio);
-        ticket.setCantidad(dto.getCantidad());
         ticket.setDescripcion(dto.getDescripcion());
         ticket.setTicketEstado(dto.getTicketEstado());
-        ticket.setFecha(java.time.LocalDate.now());
+        ticket.setFecha(LocalDate.now());
+        ticket.setFechaProgramada(dto.getFechaProgramada());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         Usuario usuarioLogueado = usuarioService.getByNombreUsuario(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
         boolean esAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
@@ -98,6 +101,24 @@ public class TicketController {
         } else {
             // Usuario normal → se asigna a sí mismo
             ticket.setUsuarioAsignado(usuarioLogueado);
+        }
+        if (servicio.getServicioNombre() == ServicioNombre.MANTENIMIENTO) {
+            ticket.setRecurrente(true);
+            ticket.setIntervaloMeses(dto.getMesesRecordatorio());
+            if (dto.getFechaProgramada() != null && dto.getMesesRecordatorio() != null) {
+                LocalDate proxima = dto.getFechaProgramada()
+                        .plusMonths(dto.getMesesRecordatorio());
+                if (proxima.getDayOfWeek().getValue() == 7) {
+                    proxima = proxima.plusDays(1);
+                }
+                ticket.setProximaEjecucion(proxima);
+                ticket.setFechaRecordatorio(proxima.minusDays(3));
+            }
+        } else {
+            ticket.setRecurrente(false);
+            ticket.setIntervaloMeses(null);
+            ticket.setProximaEjecucion(null);
+            ticket.setFechaRecordatorio(null);
         }
         ticketService.save(ticket);
         mv.setViewName("redirect:/ticket/lista");

@@ -2,15 +2,21 @@ package com.alejandro.crud.dto;
 
 import com.alejandro.crud.enums.TicketEstado;
 
+import java.time.LocalDate;
+
 
 public class TicketDTO {
     private Integer clienteId;
     private Integer servicioId;
     private Integer productoId;
     private Integer usuarioId;
+
     private Integer cantidad;
     private String descripcion;
     private TicketEstado ticketEstado;
+
+    private LocalDate fechaProgramada;
+    private Integer mesesRecordatorio;
 
     public Integer getUsuarioId() {
         return usuarioId;
@@ -66,5 +72,21 @@ public class TicketDTO {
 
     public void setTicketEstado(TicketEstado ticketEstado) {
         this.ticketEstado = ticketEstado;
+    }
+
+    public Integer getMesesRecordatorio() {
+        return mesesRecordatorio;
+    }
+
+    public void setMesesRecordatorio(Integer mesesRecordatorio) {
+        this.mesesRecordatorio = mesesRecordatorio;
+    }
+
+    public LocalDate getFechaProgramada() {
+        return fechaProgramada;
+    }
+
+    public void setFechaProgramada(LocalDate fechaProgramada) {
+        this.fechaProgramada = fechaProgramada;
     }
 }
