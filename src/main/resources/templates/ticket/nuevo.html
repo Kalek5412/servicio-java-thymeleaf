@@ -89,6 +89,17 @@
                                                 </option>
                                             </select>
                                         </div>
+                                        <div class="mb-3">
+                                            <label>Fecha Programada:</label>
+                                            <input type="date" th:field="*{fechaProgramada}"/>
+                                            <br><br>
+                                        </div>
+                                        <div id="mantenimientoCampos" style="display:none;" class="mb-3">
+                                            <label>Recordar en (meses):</label>
+                                            <input type="number" th:field="*{mesesRecordatorio}" min="1" placeholder="Ej: 3 o 6"/>
+                                            <br><br>
+                                        </div>
+
                                         <button type="submit" class="btn btn-primary"><i class="far fa-save"></i>Envoar</button>
                                     </form>
 

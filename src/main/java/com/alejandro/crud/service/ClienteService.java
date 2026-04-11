@@ -20,20 +20,34 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public Optional<Cliente> findById(Long id){
-        return clienteRepository.findById(id);
+    public Cliente findById(Long id){
+        return clienteRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Cliente no encontrado"));
     }
 
-    public void  save(Cliente cliente){
-        clienteRepository.save(cliente);
+    public Cliente save(Cliente cliente){
+        if (cliente.getNombre() == null || cliente.getNombre().isBlank()) {
+            throw new RuntimeException("Nombre obligatorio");}
+        cliente.setActivo(true);
+        return clienteRepository.save(cliente);
+    }
+
+    public Cliente update(Long id, Cliente data) {
+        Cliente c = clienteRepository.findById(id).
+                orElseThrow(()->new RuntimeException("cliente no encontrado"));
+        c.setNombre(data.getNombre());
+        c.setTelefono(data.getTelefono());
+        c.setContacto(data.getContacto());
+        c.setActivo(data.isActivo());
+        return clienteRepository.save(c);
     }
 
     public void delete(Long id){
         clienteRepository.deleteById(id);
     }
 
-    public boolean existsById(Long id){
-        return clienteRepository.existsById(id);
+    public List<Cliente> search(String q) {
+        return clienteRepository.findByNombreContainingIgnoreCase(q);
     }
 
 }

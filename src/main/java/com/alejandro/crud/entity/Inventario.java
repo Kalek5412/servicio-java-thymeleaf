@@ -1,11 +1,13 @@
 package com.alejandro.crud.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "inventarios")
+@Data
 public class Inventario {
 
     @Id
@@ -16,27 +18,5 @@ public class Inventario {
     @JoinColumn(name = "producto_id")
     private Producto producto;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    public Producto getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
 }

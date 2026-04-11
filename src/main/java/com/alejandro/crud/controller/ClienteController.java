@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/cliente")
@@ -20,74 +21,55 @@ public class ClienteController {
 
     @GetMapping("/lista")
     public ModelAndView list(){
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("/cliente/lista");
-        List<Cliente> clienteList = clienteService.findAll();
-        mv.addObject("clientes",clienteList);
-        mv.addObject("menuActivo", "cliente");
-        return  mv;
+        return new ModelAndView("/cliente/lista")
+                .addObject("clientes", clienteService.findAll());
+        //mv.addObject("menuActivo", "cliente");
     }
 
 //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("nuevo")
     public String nuevo(Model model){
-        model.addAttribute("menuActivo", "cliente");
+        model.addAttribute("cliente", new Cliente());
         return "/cliente/nuevo";
     }
 //
 //    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/guardar")
-    public ModelAndView crear(@ModelAttribute Cliente cliente){
-        ModelAndView mv = new ModelAndView();
+    public String crear(@ModelAttribute Cliente cliente){
         clienteService.save(cliente);
-        mv.setViewName("redirect:/cliente/lista");
-        return mv;
+        return "redirect:/cliente/lista";
+
     }
 
     @GetMapping("/detalle/{id}")
     public ModelAndView detalle(@PathVariable("id") Long id){
-        if(!clienteService.existsById(id))
-            return new ModelAndView("redirect:/cliente/lista");
-        Cliente cliente = clienteService.findById(id).get();
+        Cliente cliente = clienteService.findById(id);
+
         ModelAndView mv = new ModelAndView("/cliente/detalle");
         mv.addObject("cliente", cliente);
         mv.addObject("menuActivo", "cliente");
+
         return mv;
     }
 
-//    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id}")
-    public ModelAndView editar(@PathVariable("id") Long id){
-        if(!clienteService.existsById(id))
-            return new ModelAndView("redirect:/cliente/lista");
-        Cliente cliente = clienteService.findById(id).get();
-        ModelAndView mv = new ModelAndView("/cliente/editar");
-        mv.addObject("cliente", cliente);
-        return mv;
+    public ModelAndView editar(@PathVariable Long id) {
+        return new ModelAndView("/cliente/editar")
+                .addObject("cliente", clienteService.findById(id));
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/actualizar")
-    public ModelAndView actualizar(@ModelAttribute Cliente cliente,@RequestParam Long id){
-        if(!clienteService.existsById(id))
-            return new ModelAndView("redirect:/cliente/lista");
-        ModelAndView mv = new ModelAndView();
-        Cliente clienteAux = clienteService.findById(id).get();
-        clienteAux.setNombre(cliente.getNombre());
-        clienteAux.setTelefono(cliente.getTelefono());
-        clienteAux.setContacto(cliente.getContacto());
-        clienteAux.setActivo(cliente.isActivo());
-        clienteService.save(clienteAux);
-        return new ModelAndView("redirect:/cliente/lista");
+    @PostMapping("/actualizar/{id}")
+    public String actualizar(@PathVariable Long id, @ModelAttribute Cliente cliente) {
+        clienteService.update(id, cliente);
+        return "redirect:/cliente/lista";
     }
 
-//    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/borrar/{id}")
-    public ModelAndView borrar(@PathVariable("id")Long id){
-        if(clienteService.existsById(id)){
-            clienteService.delete(id);
-            return new ModelAndView("redirect:/cliente/lista");
-        }
-        return new ModelAndView("redirect:/cliente/lista");
+    public String borrar(@PathVariable Long id) {
+        clienteService.delete(id);
+        return "redirect:/cliente/lista";
     }
+
+
+
 }
