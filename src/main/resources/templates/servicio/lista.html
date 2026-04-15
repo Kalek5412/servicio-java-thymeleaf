@@ -39,6 +39,9 @@
                                         <span th:if="${servicio.servicioNombre.name() == 'MANTENIMIENTO'}" style="color:orange;">
                                             MANTENIMIENTO
                                         </span>
+                                        <span th:if="${servicio.servicioNombre.name() == 'INSTALACION'}" style="color:green;">
+                                            INSTALACION
+                                        </span>
                                     </td>
                                     <td th:text="${servicio.descripcion}"></td>
                                     <td>

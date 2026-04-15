@@ -1,8 +1,11 @@
 package com.alejandro.crud.repository;
 
-import com.alejandro.crud.entity.Producto;
 import com.alejandro.crud.entity.Servicio;
+import com.alejandro.crud.enums.TipoServicio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ServicioRepository extends JpaRepository<Servicio, Long> {
+    List<Servicio> findByServicioNombre(TipoServicio servicioNombre);
 }

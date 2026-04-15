@@ -31,9 +31,10 @@
                                         <!-- fin control ataque csrf -->
                                         <div class="mb-3">
                                             <label for="servicioNombre" class="form-label">Activo</label>
-                                            <select class="form-select" id="servicioNombre" aria-label="Default select example" name="servicioNombre">
+                                            <select class="form-select" id="servicioNombre" aria-label="Default select example" th:field="*{servicioNombre}">
                                                 <option value="MANTENIMIENTO">MANTENIMIENTO</option>
                                                 <option value="REPARACION">REPARACION</option>
+                                                <option value="INSTALACION">INSTALACION</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">

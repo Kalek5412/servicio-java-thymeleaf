@@ -3,8 +3,9 @@ package com.alejandro.crud.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
+import java.math.BigDecimal;
 import java.util.List;
+
 
 @Entity
 @Table(name = "productos")
@@ -14,5 +15,7 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private float precio;
+    private BigDecimal precio;
+    @OneToMany(mappedBy = "producto")
+    private List<Inventario> inventarios;
 }

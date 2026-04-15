@@ -2,15 +2,12 @@ package com.alejandro.crud.controller;
 
 import com.alejandro.crud.entity.Cliente;
 import com.alejandro.crud.service.ClienteService;
-import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/cliente")
@@ -44,11 +41,9 @@ public class ClienteController {
     @GetMapping("/detalle/{id}")
     public ModelAndView detalle(@PathVariable("id") Long id){
         Cliente cliente = clienteService.findById(id);
-
         ModelAndView mv = new ModelAndView("/cliente/detalle");
         mv.addObject("cliente", cliente);
         mv.addObject("menuActivo", "cliente");
-
         return mv;
     }
 

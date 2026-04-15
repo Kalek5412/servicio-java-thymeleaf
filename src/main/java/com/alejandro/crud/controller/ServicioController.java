@@ -1,5 +1,6 @@
 package com.alejandro.crud.controller;
 
+
 import com.alejandro.crud.entity.Servicio;
 import com.alejandro.crud.service.ServicioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,45 +9,37 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 
 @Controller
 @RequestMapping("/servicio")
 public class ServicioController {
+
     @Autowired
     ServicioService servicioService;
 
     @GetMapping("/lista")
     public ModelAndView list(){
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("/servicio/lista");
-        List<Servicio> servicioList = servicioService.findAll();
-        mv.addObject("servicios",servicioList);
-        mv.addObject("menuActivo", "servicio");
-        return  mv;
+        return new ModelAndView("/servicio/lista")
+                .addObject("servicios", servicioService.findAll());
     }
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("nuevo")
     public String nuevo(Model model){
-        model.addAttribute("menuActivo", "servicio");
+        model.addAttribute("servicio", new Servicio());
         return "/servicio/nuevo";
     }
     //
 //    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/guardar")
-    public ModelAndView crear(@ModelAttribute Servicio servicio){
-        ModelAndView mv = new ModelAndView();
+    public String crear(@ModelAttribute Servicio servicio){
         servicioService.save(servicio);
-        mv.setViewName("redirect:/servicio/lista");
-        return mv;
+        return "redirect:/servicio/lista";
     }
 
     @GetMapping("/detalle/{id}")
     public ModelAndView detalle(@PathVariable("id") Long id){
-        if(!servicioService.existsById(id))
-            return new ModelAndView("redirect:/servicio/lista");
-        Servicio servicio = servicioService.findById(id).get();
+        Servicio servicio = servicioService.findById(id);
         ModelAndView mv = new ModelAndView("/servicio/detalle");
         mv.addObject("servicio", servicio);
         mv.addObject("menuActivo", "servicio");
@@ -56,34 +49,21 @@ public class ServicioController {
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id}")
     public ModelAndView editar(@PathVariable("id") Long id){
-        if(!servicioService.existsById(id))
-            return new ModelAndView("redirect:/servicio/lista");
-        Servicio servicio = servicioService.findById(id).get();
-        ModelAndView mv = new ModelAndView("/servicio/editar");
-        mv.addObject("servicio", servicio);
-        return mv;
+        return new ModelAndView("/servicio/editar")
+                .addObject("servicio", servicioService.findById(id));
     }
 
     //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/actualizar")
-    public ModelAndView actualizar(@ModelAttribute Servicio servicio,@RequestParam Long id){
-        if(!servicioService.existsById(id))
-            return new ModelAndView("redirect:/servicio/lista");
-        ModelAndView mv = new ModelAndView();
-        Servicio servicioAux = servicioService.findById(id).get();
-        servicioAux.setDescripcion(servicio.getDescripcion());
-        servicioAux.setServicioNombre(servicio.getServicioNombre());
-        servicioService.save(servicioAux);
-        return new ModelAndView("redirect:/servicio/lista");
+    public String actualizar(@RequestParam Long id,@ModelAttribute Servicio servicio ){
+        servicioService.update(id,servicio);
+        return "redirect:/servicio/lista";
     }
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/borrar/{id}")
-    public ModelAndView borrar(@PathVariable("id")Long id){
-        if(servicioService.existsById(id)){
-            servicioService.delete(id);
-            return new ModelAndView("redirect:/servicio/lista");
-        }
-        return new ModelAndView("redirect:/servicio/lista");
+    public String borrar(@PathVariable("id")Long id){
+        servicioService.delete(id);
+        return "redirect:/servicio/lista";
     }
 }

@@ -25,7 +25,7 @@
                                     <small class="text-muted float-end">Default label</small>
                                 </div>
                                 <div class="card-body">
-                                    <form th:action="@{/inventario/guardar}" method="POST" th:object="${inventarioProductoDTO}">
+                                    <form th:action="@{/inventario/guardar}" method="POST" th:object="${inventarioDTO}">
                                         <!-- control ataque csrf -->
                                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                         <!-- fin control ataque csrf -->
@@ -35,7 +35,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="precio">precio</label>
-                                            <input type="number" class="form-control" id="precio"  name="precio" required="required" placeholder="..." autocomplete="off">
+                                            <input type="text" pattern="^\d+([.,]\d{1,2})?$" class="form-control" id="precio"  name="precio" required="required" placeholder="..." autocomplete="off">
                                         </div>
                                         <div class="mb-3">
                                             <label for="stock" class="form-label">stock</label>

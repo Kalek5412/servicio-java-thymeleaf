@@ -33,8 +33,8 @@
                                 <tbody class="table-border-bottom-0">
                                 <tr th:each="inventario, iterStat : ${inventarios}">
                                     <td th:text="${iterStat.count}"><i class="fab fa-angular fa-lg text-danger me-3"></i></td>
-                                    <td th:text="${inventario.producto.nombre}"></td>
-                                    <td th:text="${inventario.producto.precio}"></td>
+                                    <td th:text="${inventario.nombre}"></td>
+                                    <td th:text="${inventario.precio}"></td>
                                     <td th:text="${inventario.stock}"></td>
                                     <td>
                                         <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
