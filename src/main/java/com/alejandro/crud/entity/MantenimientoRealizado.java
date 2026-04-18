@@ -22,4 +22,9 @@ public class MantenimientoRealizado {
     @ManyToOne
     @JoinColumn(name = "mantenimiento_plan_id")
     private MantenimientoPlan mantenimientoPlan;
+
+    @PrePersist
+    public void prePersist() {
+        this.fecha = LocalDate.now();
+    }
 }

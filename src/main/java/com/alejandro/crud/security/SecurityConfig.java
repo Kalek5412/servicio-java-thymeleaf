@@ -37,7 +37,7 @@ public class SecurityConfig{
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/home","/cliente/**","/servicio/**","/producto/**",
-                                "/mantenimiento/**","/inventario/**").authenticated()
+                                "/mantenimientoPlan/**","/mantenimientoRealizado/**","/inventario/**").authenticated()
                         .requestMatchers("/registro", "/usuario/registrar").hasRole("ADMIN")
                         .requestMatchers("/error", "/fragments", "/forbidden", "/login",
                          "/assets/**")
