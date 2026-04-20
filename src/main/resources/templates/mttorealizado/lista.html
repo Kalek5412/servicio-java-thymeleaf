@@ -24,44 +24,35 @@
                                 <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>estado</th>
-                                    <th>Cliente</th>
-                                    <th>Producto</th>
-                                    <th>Usuario</th>
-                                    <th>Descripción</th>
-                                    <th>Fecha</th>
+                                    <th>tipo servcioo</th>
+                                    <th>fecha</th>
+                                    <th>tecnico</th>
+                                    <th>detalle</th>
                                     <th>Acciones</th>
                                 </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                <tr th:each="ticket, iterStat : ${tickets}">
+                                <tr th:each="mttorealizado, iterStat : ${mttorealizados}">
                                     <td th:text="${iterStat.count}"><i class="fab fa-angular fa-lg text-danger me-3"></i></td>
                                     <td>
-                                        <span th:if="${ticket.ticketEstado.name() == 'PENDIENTE'}" style="color:gray;">PENDIENTE</span>
-                                        <span th:if="${ticket.ticketEstado.name() == 'EN_PROCESO'}" style="color:orange;">EN PROCESO</span>
-                                        <span th:if="${ticket.ticketEstado.name() == 'FINALIZADO'}" style="color:green;">FINALIZADO</span>
-                                        <span th:if="${ticket.ticketEstado.name() == 'CANCELADO'}" style="color:red;">CANCELADO</span>
+                                        <span th:if="${mttorealizado.tipoServicio.name() == 'MANTENIMIENTO'}" style="color:gray;">MANTENIMIENTO</span>
+                                        <span th:if="${mttorealizado.tipoServicio.name() == 'REPARACION'}" style="color:orange;">EN REPARACION</span>
+                                        <span th:if="${mttorealizado.tipoServicio.name() == 'INSTALACION'}" style="color:green;">FINALIZADO</span>
                                     </td>
-                                    <td th:text="${ticket.cliente.nombre}"></td>
+                                    <td th:text="${mttorealizado.fecha}"></td>
+                                    <td th:text="${mttorealizado.tecnico}"></td>
 
                                     <!-- Producto -->
-                                    <td th:text="${ticket.producto.nombre}"></td>
-                                    <td th:text="${ticket.servicio.servicioNombre}"></td>
-                                    <!-- Usuario -->
-                                    <td th:text="${ticket.usuarioAsignado.nombreUsuario}"></td>
-
+                                    <td th:text="${mttorealizado.detalle}"></td>
                                     <!-- Descripción -->
-                                    <td th:text="${ticket.descripcion}"></td>
 
-                                    <!-- Fecha -->
-                                    <td th:text="${ticket.fecha}"></td>
                                     <td>
                                         <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
 
                                             <!-- VER -->
                                             <li class="avatar avatar-xs pull-up bg-info text-white d-flex justify-content-center align-items-center me-3"
                                                 >
-                                                <a th:href="@{/ticket/detalle/{id}(id=${ticket.id})}"
+                                                <a th:href="@{/mttorealizado/detalle/{id}(id=${mttorealizado.id})}"
                                                    class="text-white">
                                                     <i class="bx bx-show"></i>
                                                 </a>
@@ -69,7 +60,7 @@
 
                                             <!-- EDITAR -->
                                             <li class="avatar avatar-xs pull-up bg-warning text-white d-flex justify-content-center align-items-center me-3">
-                                                <a th:href="@{/ticket/editar/{id}(id=${ticket.id})}"
+                                                <a th:href="@{/mttorealizado/editar/{id}(id=${mttorealizado.id})}"
                                                    class="text-white">
                                                     <i class="bx bx-edit-alt"></i>
                                                 </a>
@@ -78,7 +69,7 @@
                                             <!-- ELIMINAR / DESACTIVAR -->
                                             <li class="avatar avatar-xs pull-up bg-danger text-white d-flex justify-content-center align-items-center"
                                                 >
-                                                <a th:href="@{/ticket/borrar/{id}(id=${ticket.id})}"
+                                                <a th:href="@{/mttorealizado/borrar/{id}(id=${mttorealizado.id})}"
                                                    class="text-white"
                                                    onclick="return confirm('¿Desactivar ticket?')">
                                                     <i class="bx bx-trash"></i>

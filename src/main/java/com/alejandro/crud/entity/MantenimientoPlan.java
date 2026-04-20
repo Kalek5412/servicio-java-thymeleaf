@@ -31,12 +31,8 @@ public class MantenimientoPlan {
     private Cliente cliente;
     @ManyToOne
     private Producto producto;
-    @ManyToOne
-    @JoinColumn(name = "tecnico_id")
-    private Usuario tecnico;
     @OneToMany(mappedBy = "mantenimientoPlan", cascade = CascadeType.ALL)
     private List<MantenimientoRealizado> mantenimientoRealizados;
-
     @PrePersist
     public void prePersist() {
         this.fechaCreacion = LocalDate.now();

@@ -1,6 +1,8 @@
 package com.alejandro.crud.controller;
 
+import com.alejandro.crud.dto.MttoRelizadoDTO;
 import com.alejandro.crud.entity.MantenimientoRealizado;
+import com.alejandro.crud.security.repository.UsuarioRepository;
 import com.alejandro.crud.service.MttoRealizadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,36 +13,37 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/mttorealizado")
 public class MttoRealizadoController {
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
     @Autowired
     MttoRealizadoService mttoRealizadoService;
     
     @GetMapping("/lista")
-    public ModelAndView list(){
-        return new ModelAndView("/mttorealizado/lista")
-                .addObject("mttorealizados", mttoRealizadoService.findAll());
+    public String list(Model model){
+        model.addAttribute("mttorealizados", mttoRealizadoService.findAll());
+        return "mttorealizado/lista";
     }
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("nuevo")
     public String nuevo(Model model){
-        model.addAttribute("mttorealizado", new MantenimientoRealizado());
+        model.addAttribute("mttorealizadoDTO", new MttoRelizadoDTO());
+        model.addAttribute("tecnicos", usuarioRepository.findAll());
         return "/mttorealizado/nuevo";
     }
     //
 //    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/guardar")
-    public String crear(@ModelAttribute MantenimientoRealizado mttorealizado){
-        mttoRealizadoService.save(mttorealizado);
+    public String crear(@ModelAttribute MttoRelizadoDTO dto){
+        mttoRealizadoService.save(dto);
         return "redirect:/mttorealizado/lista";
     }
 
     @GetMapping("/detalle/{id}")
-    public ModelAndView detalle(@PathVariable("id") Long id){
-        MantenimientoRealizado mttorealizado = mttoRealizadoService.findById(id);
-        ModelAndView mv = new ModelAndView("/mttorealizado/detalle");
-        mv.addObject("mttorealizado", mttorealizado);
-        mv.addObject("menuActivo", "mttorealizado");
-        return mv;
+    public String detalle(@PathVariable("id") Long id,Model model){
+        model.addAttribute("mttorealizado", mttoRealizadoService.findById(id));
+        return "mttorealizado/detalle";
     }
 
     //    //@PreAuthorize("hasRole('ADMIN')")
@@ -50,12 +53,7 @@ public class MttoRealizadoController {
                 .addObject("mttorealizado", mttoRealizadoService.findById(id));
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/actualizar")
-    public String actualizar(@RequestParam Long id,@ModelAttribute MantenimientoRealizado mttorealizado ){
-        mttoRealizadoService.update(id,mttorealizado);
-        return "redirect:/mttorealizado/lista";
-    }
+
 
     //    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/borrar/{id}")
